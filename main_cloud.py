@@ -4,10 +4,10 @@ from config import DATASET
 import os
 
 st.set_page_config(layout="wide")
-st.title("BathyUNet++ map")
 
 
-st.sidebar.title("setting")
+
+st.sidebar.title("Setting")
 selected_site = st.sidebar.selectbox(
     "select site",
     options=list(DATASET.keys())
@@ -26,7 +26,10 @@ selected_model = st.sidebar.selectbox(
 
 tif_path = site_info[selected_date][selected_model]["tif_path"]
 st.sidebar.info(f"📅 Date: {selected_date}")
-st.sidebar.info(f"🤖 Model: {selected_model}")
+st.sidebar.info(f" Model: {selected_model}")
+st.title(f" {selected_site}")
+st.subheader(f"📅 {selected_date}")
+st.subheader(f"🌐 {selected_model}")
 
 selected_cmap = st.sidebar.selectbox(
     "colormap",
