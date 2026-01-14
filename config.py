@@ -13,7 +13,7 @@ def load_dataset_from_directory(data_dir="./data"):
     
     pattern = r"depth_(.+?)_(\d{8})_(.+?)_mask_ODW\.tiff"
     
-    data_path = Path(data_dir)
+    data_path = Path(data_dir).resolve()
     if not data_path.exists():
         return {}
     
@@ -29,7 +29,7 @@ def load_dataset_from_directory(data_dir="./data"):
         
             model = model_raw.replace("_", " ")
             
-            dataset[site][date][model]["tif_path"] = str(tif_file)
+            dataset[site][date][model]["tif_path"] = str(tif_file.resolve())
     
     return {k: dict(v) for k, v in dataset.items()}
 

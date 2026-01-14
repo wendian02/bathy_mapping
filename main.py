@@ -1,10 +1,20 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
 from config import DATASET
+import os
 
 
 st.set_page_config(layout="wide")
 st.title("BathyUNet++ map")
+
+if not DATASET:
+    st.error("❌ No data files found! Check if data/ folder exists and contains .tiff files")
+    st.info(f"Current working directory: {os.getcwd()}")
+    if os.path.exists('./data'):
+        st.info(f"Files in data/: {os.listdir('./data')}")
+    else:
+        st.warning("data/ folder not found")
+    st.stop()
 
 st.sidebar.title("setting")
 selected_site = st.sidebar.selectbox(
@@ -23,8 +33,11 @@ selected_model = st.sidebar.selectbox(
     options=list(site_info[selected_date].keys())
 )
 
+tif_path = site_info[selected_date][selected_model]["tif_path"]
 st.sidebar.info(f"📅 Date: {selected_date}")
 st.sidebar.info(f"🤖 Model: {selected_model}")
+st.sidebar.info(f"📁 File exists: {'✅' if os.path.exists(tif_path) else '❌'}")
+
 selected_cmap = st.sidebar.selectbox(
     "colormap",
     ["jet", "blues","viridis", "plasma", "inferno", "magma", "terrain", "gist_earth", "ocean"],
@@ -42,7 +55,7 @@ opacity = st.sidebar.slider("opacity", 0.0, 1.0, 1.0)
 
 m = leafmap.Map()
 m.add_raster(
-        site_info[selected_date][selected_model]["tif_path"], 
+        tif_path, 
         layer_name="depth", 
         colormap=selected_cmap, 
         vmin=min_val, 

@@ -2,3 +2,5 @@ __pycache__/
 .DS_Store
 .streamlit/
 
+tiff2cog.py
+data_raw/
