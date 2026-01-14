@@ -4,7 +4,7 @@ from pathlib import Path
 from collections import defaultdict
 
 
-def load_dataset_from_directory(data_dir="./data"):
+def load_dataset_from_directory(data_dir="data"):
     """
     format: depth_{site}_{date}_{model}_mask_ODW.tiff
     example: depth_Oahu_20240115_BathyUnetPlusPlus_scSE_mask_ODW.tiff
@@ -13,7 +13,9 @@ def load_dataset_from_directory(data_dir="./data"):
     
     pattern = r"depth_(.+?)_(\d{8})_(.+?)_mask_ODW\.tiff"
     
-    data_path = Path(data_dir).resolve()
+    script_dir = Path(__file__).parent.resolve()
+    data_path = script_dir / data_dir
+    
     if not data_path.exists():
         return {}
     

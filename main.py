@@ -10,8 +10,13 @@ st.title("BathyUNet++ map")
 if not DATASET:
     st.error("❌ No data files found! Check if data/ folder exists and contains .tiff files")
     st.info(f"Current working directory: {os.getcwd()}")
-    if os.path.exists('./data'):
-        st.info(f"Files in data/: {os.listdir('./data')}")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(script_dir, 'data')
+    st.info(f"Script directory: {script_dir}")
+    st.info(f"Looking for data in: {data_dir}")
+    if os.path.exists(data_dir):
+        files = os.listdir(data_dir)
+        st.info(f"Files in data/: {files}")
     else:
         st.warning("data/ folder not found")
     st.stop()
@@ -36,7 +41,11 @@ selected_model = st.sidebar.selectbox(
 tif_path = site_info[selected_date][selected_model]["tif_path"]
 st.sidebar.info(f"📅 Date: {selected_date}")
 st.sidebar.info(f"🤖 Model: {selected_model}")
-st.sidebar.info(f"📁 File exists: {'✅' if os.path.exists(tif_path) else '❌'}")
+file_exists = os.path.exists(tif_path)
+st.sidebar.info(f"📁 File exists: {'✅' if file_exists else '❌'}")
+if not file_exists:
+    st.sidebar.error(f"Path: {tif_path}")
+    st.error(f"File not found: {tif_path}")
 
 selected_cmap = st.sidebar.selectbox(
     "colormap",
