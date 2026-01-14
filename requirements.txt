@@ -9,3 +9,4 @@ localtileserver
 xarray
 psutil
 Pillow
+huggingface_hub

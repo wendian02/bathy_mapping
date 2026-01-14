@@ -4,3 +4,4 @@ __pycache__/
 
 tiff2cog.py
 data_raw/
+data_cog/

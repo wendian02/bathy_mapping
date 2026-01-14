@@ -1,17 +1,7 @@
 import streamlit as st
-import folium
-from streamlit_folium import st_folium
-import rasterio
-from rasterio.warp import calculate_default_transform, reproject, Resampling
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
+import leafmap.foliumap as leafmap
 from config import DATASET
 import os
-import base64
-from io import BytesIO
-from PIL import Image
-
 
 st.set_page_config(layout="wide")
 st.title("BathyUNet++ map")
@@ -53,40 +43,25 @@ min_val, max_val = st.sidebar.slider(
 opacity = st.sidebar.slider("opacity", 0.0, 1.0, 1.0)
 
 
+m = leafmap.Map()
 
-with rasterio.open(tif_path) as src:
-    data = src.read(1)
-    bounds = src.bounds
-    
-    data_masked = np.ma.masked_invalid(data)
-    data_masked = np.ma.masked_where((data_masked < min_val) | (data_masked > max_val), data_masked)
-    
-    norm_data = (data_masked - min_val) / (max_val - min_val)
-    norm_data = np.clip(norm_data, 0, 1)
-    
-    cmap_obj = matplotlib.colormaps.get_cmap(selected_cmap)
-    colored_data = cmap_obj(norm_data)
-    colored_data[..., 3] = np.where(data_masked.mask, 0, opacity)
-    
-    img = Image.fromarray((colored_data * 255).astype(np.uint8), mode='RGBA')
-    
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    
-    center_lat = (bounds.bottom + bounds.top) / 2
-    center_lon = (bounds.left + bounds.right) / 2
-    
-    m = folium.Map(location=[center_lat, center_lon], zoom_start=12)
-    
-    folium.raster_layers.ImageOverlay(
-        image=f"data:image/png;base64,{img_str}",
-        bounds=[[bounds.bottom, bounds.left], [bounds.top, bounds.right]],
+m.add_cog_layer(
+        url=tif_path,
+        name="Depth",
+        palette=selected_cmap,
+        vmin=min_val,
+        vmax=max_val,
         opacity=opacity,
-        name="depth"
-    ).add_to(m)
-    
-    folium.LayerControl().add_to(m)
-    
-    
-    st_folium(m, width=None, height=500)
+    )
+
+
+m.add_colormap(
+    cmap=selected_cmap,
+    vmin=min_val,
+    vmax=max_val,
+    width=2,
+    height=0.1,
+    position="bottomleft"
+)
+
+m.to_streamlit(height=500)
