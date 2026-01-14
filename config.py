@@ -2,9 +2,10 @@ import os
 import re
 from pathlib import Path
 from collections import defaultdict
+import glob
 
 
-def load_dataset_from_directory(data_dir="data"):
+def load_dataset_from_directory(data_dir="./data"):
     """
     format: depth_{site}_{date}_{model}_mask_ODW.tiff
     example: depth_Oahu_20240115_BathyUnetPlusPlus_scSE_mask_ODW.tiff
@@ -13,14 +14,8 @@ def load_dataset_from_directory(data_dir="data"):
     
     pattern = r"depth_(.+?)_(\d{8})_(.+?)_mask_ODW\.tiff"
     
-    script_dir = Path(__file__).parent.resolve()
-    data_path = script_dir / data_dir
-    
-    if not data_path.exists():
-        return {}
-    
-    for tif_file in data_path.glob("*.tiff"):
-        match = re.match(pattern, tif_file.name)
+    for tif_file in glob.glob(os.path.join(data_dir, "*.tiff")):
+        match = re.match(pattern, os.path.basename(tif_file))
         if match:
             site_raw, date_raw, model_raw = match.groups()
             
@@ -31,7 +26,7 @@ def load_dataset_from_directory(data_dir="data"):
         
             model = model_raw.replace("_", " ")
             
-            dataset[site][date][model]["tif_path"] = str(tif_file.resolve())
+            dataset[site][date][model]["tif_path"] = tif_file
     
     return {k: dict(v) for k, v in dataset.items()}
 
