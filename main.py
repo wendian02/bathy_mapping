@@ -3,9 +3,14 @@ import leafmap.foliumap as leafmap
 from config import DATASET
 import os
 
-
 st.set_page_config(layout="wide")
 st.title("BathyUNet++ map")
+
+try:
+    import localtileserver
+    st.sidebar.success("✅ localtileserver available")
+except ImportError as e:
+    st.sidebar.error(f"❌ localtileserver not available: {e}")
 
 if not DATASET:
     st.error("❌ No data files found! Check if data/ folder exists and contains .tiff files")
@@ -62,23 +67,32 @@ min_val, max_val = st.sidebar.slider(
 opacity = st.sidebar.slider("opacity", 0.0, 1.0, 1.0)
 
 
-m = leafmap.Map()
-m.add_raster(
-        tif_path, 
-        layer_name="depth", 
-        colormap=selected_cmap, 
-        vmin=min_val, 
+try:
+    m = leafmap.Map()
+    st.info(f"🗺️ Loading raster from: {os.path.basename(tif_path)}")
+    
+    m.add_raster(
+            tif_path, 
+            layer_name="depth", 
+            colormap=selected_cmap, 
+            vmin=min_val, 
+            vmax=max_val,
+            opacity=opacity
+        )
+    
+    m.add_colormap(
+        cmap=selected_cmap,
+        vmin=min_val,
         vmax=max_val,
-        opacity=opacity
+        width=2,
+        height=0.1,
+        position="bottomleft"
     )
-
-m.add_colormap(
-    cmap=selected_cmap,
-    vmin=min_val,
-    vmax=max_val,
-    width=2,
-    height=0.1,
-    position="bottomleft"
-)
-
-m.to_streamlit(height=500)
+    
+    m.to_streamlit(height=500)
+    
+except Exception as e:
+    st.error(f"❌ Error loading raster: {str(e)}")
+    st.error(f"Error type: {type(e).__name__}")
+    import traceback
+    st.code(traceback.format_exc())
