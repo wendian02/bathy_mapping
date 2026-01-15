@@ -10,3 +10,4 @@ xarray
 psutil
 Pillow
 huggingface_hub
+rioxarray
