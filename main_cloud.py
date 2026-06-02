@@ -48,7 +48,7 @@ opacity = st.sidebar.slider("Opacity", 0.0, 1.0, 1.0)
 
 selected_basemap = st.sidebar.selectbox(
     "Basemap",
-    ["Google Hybrid", "Google Maps", "Google Satellite", "Esri World Imagery", "OpenStreetMap"],
+    ["OpenStreetMap", "Google Hybrid", "Esri World Imagery", "Google Maps", "Google Satellite"],
     index=0
 )
 
@@ -66,13 +66,11 @@ basemaps = {
     "Google Maps": ("https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", "Google"),
     "Google Satellite": ("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", "Google"),
     "Esri World Imagery": ("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", "Esri"),
+    "OpenStreetMap": ("https://tile.openstreetmap.org/{z}/{x}/{y}.png", "OpenStreetMap"),
 }
 
 for name, (url, attribution) in basemaps.items():
     m.add_tile_layer(url=url, name=name, attribution=attribution, shown=(name == selected_basemap))
-
-if selected_basemap == "OpenStreetMap":
-    m.add_basemap("OpenStreetMap")
 
 m.add_cog_layer(
     url=tif_path,
