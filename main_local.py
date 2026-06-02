@@ -1,12 +1,13 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
-from config import DATASET
+from config import load_dataset_local
+
 import os
 
 st.set_page_config(layout="wide")
 st.title("BathyUNet++ map")
 
-
+DATASET = load_dataset_local("./data_cog") # load local data
 st.sidebar.title("setting")
 selected_site = st.sidebar.selectbox(
     "select site",

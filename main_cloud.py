@@ -1,9 +1,10 @@
 import streamlit as st
 import leafmap.foliumap as leafmap
-from config import DATASET
+from config import load_dataset_cloud
 import os
 
 st.set_page_config(layout="wide")
+DATASET = load_dataset_cloud() # load cloud data
 
 st.sidebar.title("Setting")
 selected_site = st.sidebar.selectbox(

@@ -56,4 +56,3 @@ def load_dataset_cloud():
     
     return {k: dict(v) for k, v in dataset.items()}
 
-DATASET = load_dataset_cloud()
