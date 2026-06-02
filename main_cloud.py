@@ -40,7 +40,7 @@ min_val, max_val = st.sidebar.slider(
 )
 opacity = st.sidebar.slider("opacity", 0.0, 1.0, 1.0)
 
-titiler_endpoint = "http://165.22.229.35:8000"
+titiler_endpoint = "http://165.22.229.35/titiler"
 
 m = leafmap.Map(draw_control=False)
 
