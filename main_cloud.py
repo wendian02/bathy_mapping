@@ -40,16 +40,7 @@ min_val, max_val = st.sidebar.slider(
 )
 opacity = st.sidebar.slider("opacity", 0.0, 1.0, 1.0)
 
-st.sidebar.info("If the map is not loading, please change the endpoint")
-
-titiler_endpoint = st.sidebar.selectbox(
-    "titiler endpoint",
-    [
-        "https://titiler.xyz",
-        "https://giswqs-titiler-endpoint.hf.space",
-    ],
-    index=0
-)
+titiler_endpoint = "http://165.22.229.35:8000"
 
 m = leafmap.Map(draw_control=False)
 
