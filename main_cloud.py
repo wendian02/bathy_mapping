@@ -52,7 +52,7 @@ selected_basemap = st.sidebar.selectbox(
     index=0
 )
 
-titiler_endpoint = "http://165.22.229.35/titiler"
+titiler_endpoint = "https://bathy.me/titiler"
 
 m = leafmap.Map(draw_control=False)
 
