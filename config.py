@@ -53,6 +53,10 @@ def load_dataset_cloud():
             date = f"{date_raw[:4]}-{date_raw[4:6]}-{date_raw[6:8]}"
             model = model_raw.replace("_", " ")
             dataset[site][date][model]["tif_path"] = f"{BASE_URL}/{filename}"
-    
-    return {k: dict(v) for k, v in dataset.items()}
+
+    result = {k: dict(v) for k, v in dataset.items()}
+    priority = ["Oahu"]
+    ordered = {k: result[k] for k in priority if k in result}
+    ordered.update({k: v for k, v in result.items() if k not in priority})
+    return ordered
 
