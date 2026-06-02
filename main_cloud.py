@@ -48,7 +48,7 @@ opacity = st.sidebar.slider("Opacity", 0.0, 1.0, 1.0)
 
 selected_basemap = st.sidebar.selectbox(
     "Basemap",
-    ["OpenStreetMap", "Google Hybrid", "Esri World Imagery", "Google Maps", "Google Satellite"],
+    ["Esri World Imagery", "Google Hybrid", "OpenStreetMap", "Google Maps", "Google Satellite"],
     index=0
 )
 
