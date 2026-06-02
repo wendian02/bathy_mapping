@@ -5,6 +5,11 @@ from config import load_dataset_cloud
 import os
 
 st.set_page_config(layout="wide", page_title="BathyUNet++")
+st.markdown("""
+<style>
+.leaflet-container { cursor: pointer !important; }
+</style>
+""", unsafe_allow_html=True)
 DATASET = load_dataset_cloud()
 
 st.sidebar.title("Setting")
@@ -50,6 +55,11 @@ selected_basemap = st.sidebar.selectbox(
 titiler_endpoint = "http://165.22.229.35/titiler"
 
 m = leafmap.Map(draw_control=False)
+
+import folium
+m.get_root().html.add_child(folium.Element("""
+<style>.leaflet-container { cursor: pointer !important; }</style>
+"""))
 
 basemaps = {
     "Google Hybrid": ("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", "Google"),
